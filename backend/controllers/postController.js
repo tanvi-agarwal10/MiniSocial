@@ -13,21 +13,21 @@ exports.createPost = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Check that text exists (image is optional on deployed version)
-    if (!text || text.trim() === '') {
-      return res.status(400).json({ message: 'Post must have text content' });
+    // Check that either text or image exists
+    let imageUrl = null;
+    if (req.file) {
+      // Cloudinary stores URL in req.file.path
+      imageUrl = req.file.path;
     }
 
-    // Image URL - only set if file successfully uploaded
-    let imageUrl = null;
-    if (req.file && req.file.filename) {
-      imageUrl = `/uploads/${req.file.filename}`;
+    if (!text && !imageUrl) {
+      return res.status(400).json({ message: 'Post must have either text or image' });
     }
 
     const post = new Post({
       authorId: userId,
       username: user.username,
-      text: text.trim(),
+      text: text || null,
       imageUrl: imageUrl || null,
     });
 
