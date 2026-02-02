@@ -1,0 +1,24 @@
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-brand:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.nav {
+  gap: 1rem;
+}
+
+@media (max-width: 576px) {
+  .nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav button {
+    width: 100%;
+  }
+}

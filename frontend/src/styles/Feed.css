@@ -1,0 +1,13 @@
+.feed-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.feed-container .alert {
+  margin-bottom: 2rem;
+}
+
+.spinner {
+  margin: 2rem 0;
+}
