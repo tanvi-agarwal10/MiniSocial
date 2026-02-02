@@ -20,7 +20,7 @@ A modern, lightweight social media platform built with the MERN stack. Share you
 - MongoDB with Mongoose ODM
 - JWT for authentication
 - bcryptjs for password hashing
-- Multer for image uploads
+- Multer + Cloudinary for cloud image uploads
 - express-validator for input validation
 - CORS for cross-origin requests
 
@@ -104,6 +104,9 @@ PORT=5001
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_here
 NODE_ENV=development
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
 3. **Setup Frontend:**
@@ -193,26 +196,36 @@ Open your browser and go to `http://localhost:3000` 🎉
 
 ## 📸 Image Upload
 
-- Supports: JPG, PNG, GIF, WebP
-- Max file size: 5MB
-- Images stored in `backend/uploads/` folder
-- Accessible via `http://localhost:5001/uploads/[filename]`
+- **Cloud Storage:** Images uploaded via Cloudinary (supports JPG, PNG, GIF, WebP)
+- **Max file size:** 5MB
+- **Automatic persistence:** Images persist across application restarts
+- **Real-time display:** Images show immediately after upload
+- **Automatic fallback:** Broken images are hidden gracefully
 
 ## 🌐 Deployment
+
+### Prerequisites for Cloud Deployment
+- **Cloudinary Account:** Get free account at [cloudinary.com](https://cloudinary.com)
+  - Note: After deploying backend, add these env vars to your hosting platform:
+    - `CLOUDINARY_CLOUD_NAME`
+    - `CLOUDINARY_API_KEY`
+    - `CLOUDINARY_API_SECRET`
 
 ### Deploy Backend to Render
 1. Push code to GitHub
 2. Connect Render to your GitHub repo
-3. Set environment variables in Render dashboard
+3. Set environment variables in Render dashboard (including Cloudinary credentials)
 4. Deploy!
 
-### Deploy Frontend to Vercel
-1. Import your GitHub repo to Vercel
-2. Set `REACT_APP_API_URL` to your Render backend URL
-3. Deploy with one click!
+### Deploy Frontend to Netlify
+1. Import your GitHub repo to Netlify
+2. Set `REACT_APP_API_URL` to your Render backend URL (e.g., `https://minisocial-backend-xxxxx.onrender.com/api`)
+3. Build command: `npm run build`
+4. Publish directory: `build`
+5. Deploy with one click!
 
 ### MongoDB Atlas
-- Create account at mongodb.com/cloud/atlas
+- Create account at [mongodb.com/cloud/atlas](https://mongodb.com/cloud/atlas)
 - Create a cluster
 - Get connection string and add to backend `.env`
 
