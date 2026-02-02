@@ -34,9 +34,20 @@ const Feed = () => {
     fetchPosts();
   }, [currentPage]);
 
-  const handlePostCreated = () => {
-    setCurrentPage(1);
+  const handlePostCreated = async () => {
     setShowModal(false);
+    // Refetch posts immediately from page 1
+    try {
+      setLoading(true);
+      const response = await postAPI.getPosts(1, limit);
+      setPosts(response.data.posts);
+      setTotalPages(response.data.pagination.totalPages);
+      setCurrentPage(1);
+    } catch (err) {
+      console.error('Failed to refresh posts', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePostUpdated = () => {

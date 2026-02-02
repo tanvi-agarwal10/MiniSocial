@@ -60,9 +60,10 @@ const PostCard = ({ post, onPostUpdated }) => {
         {post.imageUrl && (
           <div className="post-image-container">
             <img
-              src={`${process.env.REACT_APP_API_URL?.replace('/api', '')}${post.imageUrl}`}
+              src={post.imageUrl}
               alt="Post"
               className="post-image"
+              onError={(e) => { e.target.style.display = 'none'; }}
             />
           </div>
         )}
