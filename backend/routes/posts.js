@@ -1,7 +1,7 @@
 const express = require('express');
-const { body } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 const auth = require('../middleware/auth');
-const upload = require('../middleware/upload');
+const { upload, uploadErrorHandler } = require('../middleware/upload');
 const {
   createPost,
   getPosts,
@@ -23,6 +23,7 @@ router.post(
   '/',
   auth,
   upload.single('image'),
+  uploadErrorHandler,
   [body('text').optional().trim().isLength({ max: 500 }).withMessage('Text must be less than 500 characters')],
   createPost
 );

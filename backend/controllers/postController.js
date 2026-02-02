@@ -13,17 +13,22 @@ exports.createPost = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Check that either text or image exists
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-    if (!text && !imageUrl) {
-      return res.status(400).json({ message: 'Post must have either text or image' });
+    // Check that text exists (image is optional on deployed version)
+    if (!text || text.trim() === '') {
+      return res.status(400).json({ message: 'Post must have text content' });
+    }
+
+    // Image URL - only set if file successfully uploaded
+    let imageUrl = null;
+    if (req.file && req.file.filename) {
+      imageUrl = `/uploads/${req.file.filename}`;
     }
 
     const post = new Post({
       authorId: userId,
       username: user.username,
-      text: text || null,
-      imageUrl,
+      text: text.trim(),
+      imageUrl: imageUrl || null,
     });
 
     await post.save();
@@ -34,6 +39,7 @@ exports.createPost = async (req, res) => {
       post,
     });
   } catch (error) {
+    console.error('Post creation error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

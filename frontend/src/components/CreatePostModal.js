@@ -32,8 +32,8 @@ const CreatePostModal = ({ show, onHide, onPostCreated }) => {
     e.preventDefault();
     setError('');
 
-    if (!formData.text.trim() && !formData.image) {
-      setError('Post must have text or image');
+    if (!formData.text.trim()) {
+      setError('Post must have text content');
       return;
     }
 
@@ -41,8 +41,9 @@ const CreatePostModal = ({ show, onHide, onPostCreated }) => {
 
     try {
       const data = new FormData();
-      if (formData.text) data.append('text', formData.text);
-      if (formData.image) data.append('image', formData.image);
+      data.append('text', formData.text);
+      // Note: Image upload disabled due to Render's ephemeral storage
+      // For production, use S3/Cloudinary integration
 
       await postAPI.createPost(data);
       setFormData({ text: '', image: null });
