@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Alert, Spinner, Pagination } from 'react-bootstrap';
 import { postAPI } from '../services/api';
-import { AuthContext } from '../context/AuthContext';
 import PostCard from '../components/PostCard';
 import CreatePostModal from '../components/CreatePostModal';
 import Navbar from '../components/Navbar';
@@ -14,37 +13,34 @@ const Feed = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showModal, setShowModal] = useState(false);
-  const { user } = useContext(AuthContext);
 
   const limit = 10;
 
   useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const response = await postAPI.getPosts(currentPage, limit);
+        setPosts(response.data.posts);
+        setTotalPages(response.data.pagination.totalPages);
+      } catch (err) {
+        setError('Failed to load posts');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchPosts();
   }, [currentPage]);
 
-  const fetchPosts = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const response = await postAPI.getPosts(currentPage, limit);
-      setPosts(response.data.posts);
-      setTotalPages(response.data.pagination.totalPages);
-    } catch (err) {
-      setError('Failed to load posts');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handlePostCreated = () => {
     setCurrentPage(1);
-    fetchPosts();
     setShowModal(false);
   };
 
   const handlePostUpdated = () => {
-    fetchPosts();
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page) => {
